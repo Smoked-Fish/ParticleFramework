@@ -373,7 +373,7 @@ namespace ParticleFramework.Framework.Managers
             }
         }
 
-        public void LoadEffects()
+        public static void LoadEffects()
         {
             try
             {
@@ -404,11 +404,6 @@ namespace ParticleFramework.Framework.Managers
             {
                 ModEntry.monitor.Log($"Error loading particle effects: {e}", LogLevel.Error);
             }
-        }
-
-        public void AddCustomDictPath(string customDictPath)
-        {
-            dictPaths.Add(customDictPath);
         }
 
         public static void UnloadEffect(string key)
