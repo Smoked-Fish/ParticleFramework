@@ -36,10 +36,13 @@ namespace API
     /// <summary>Represents particle effect data.</summary>
     public class ParticleEffectData
     {
+        /// <summary>The unique key for the particle effect</summary>
+        public string key;
+
         /// <summary>The type of thing to target; one of "object", "furniture", "npc", "location", "hat", "shirt", "boots", "pants", "tool", "ring"</summary>
         public string type;
 
-        /// <summary>The qualified item id or name of the target</summary>
+        /// <summary>The QualifiedItemId or Name of the target</summary>
         public string name;
 
         /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
