@@ -18,7 +18,6 @@ namespace ParticleFramework.Framework.Patches
         /// <summary>
         /// Applies method patches using Harmony for a specified target method.
         /// </summary>
-        /// <param name="isPostfix">0 for postfix, 1 for prefix.</param>
         /// <param name="originalMethod">The name of the original method to patch.</param>
         /// <param name="newMethod">The name of the method to be applied as a patch.</param>
         /// <param name="parameters">Optional parameters for the method.</param>
