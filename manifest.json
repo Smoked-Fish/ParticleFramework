@@ -6,6 +6,7 @@
   "UniqueID": "Espy.ParticleFramework",
   "EntryDll": "ParticleFramework.dll",
   "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": [ "Nexus:23544" ],
   "Dependencies": [
     {
       "UniqueID": "spacechase0.GenericModConfigMenu",
