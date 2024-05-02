@@ -81,10 +81,10 @@ namespace API
         /// <summary>Allows transparency (default: 1)</summary>
         public float maxAlpha = 1;
 
-        /// <summary>The width of each particle on the sprite sheet (see textures below)</summary>
+        /// <summary>The width of each particle on the sprite sheet</summary>
         public int particleWidth;
 
-        /// <summary>The height of each particle on the sprite sheet (see textures below)</summary>
+        /// <summary>The height of each particle on the sprite sheet</summary>
         public int particleHeight;
 
         /// <summary>If set to > 0, specifies a circular particle spawn field and sets the outer radius of the field</summary>
@@ -129,7 +129,7 @@ namespace API
         /// <summary>The chance (0 to 1) that a new particle will be created, checked each tick</summary>
         public float particleChance = 1;
 
-        /// <summary>The fake path to this particle's spritesheet, caught by your Content Patcher pack (as in the example above).</summary>
+        /// <summary>The path to this particle's spritesheet.</summary>
         public string spriteSheetPath;
 
         /// <summary>The sprite sheet used by the effect.</summary>
