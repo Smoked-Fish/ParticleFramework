@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using ParticleFramework.Framework.Data;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +17,11 @@ namespace ParticleFramework.Framework.Managers
 {
     internal class ParticleEffectManager
     {
-        public static readonly string dictPath = "Mods/Espy.ParticleFramework/dict";
+        public static readonly List<string> dictPaths = new List<string>
+        {
+            "Mods/Espy.ParticleFramework/dict"
+        };
+
         public static Dictionary<string, ParticleEffectData> effectDict = new Dictionary<string, ParticleEffectData>();
 
         public static Dictionary<string, List<string>> objectDict = new Dictionary<string, List<string>>();
@@ -197,28 +204,53 @@ namespace ParticleFramework.Framework.Managers
 
         private static void DrawParticle(SpriteBatch spriteBatch, ParticleData particle, ParticleEffectData effectData, float drawDepth, bool isScreenSpace)
         {
-            int frame = (int)Math.Round(particle.age * effectData.frameSpeed) % (effectData.spriteSheet.Width / effectData.particleWidth);
+            try
+            {
+                // Avoid divide by zero error
+                if (effectData.particleWidth <= 0 || effectData.particleHeight <= 0)
+                {
+                    ModEntry.monitor.Log($"Particle '{effectData.key}' width or height is zero or negative. Unable to draw particle.", LogLevel.Error);
+                    UnloadEffect(effectData.key);
+                    return;
+                }
 
-            float depthOffset = GetDepthOffset(effectData);
+                float frameSpeed = (effectData.frameSpeed != 0) ? effectData.frameSpeed : 1; // Ensure frameSpeed is not zero
+                int totalFrames = effectData.spriteSheet.Width / effectData.particleWidth;
+                // Avoid divide by zero error
+                if (totalFrames <= 0)
+                {
+                    ModEntry.monitor.Log($"Particle '{effectData.key}' total frames calculated as zero. Make sure particleWidth is valid. Unable to draw particle.", LogLevel.Error);
+                    UnloadEffect(effectData.key);
+                    return;
+                }
+                int frame = (int)Math.Round(particle.age * frameSpeed) % totalFrames;
 
-            spriteBatch.Draw(
-                effectData.spriteSheet,
-                new Rectangle(
-                    Utility.Vector2ToPoint(isScreenSpace ? particle.position : Game1.GlobalToLocal(particle.position)),
-                    new Point((int)(effectData.particleWidth * particle.scale), (int)(effectData.particleHeight * particle.scale))
-                ),
-                new Rectangle(
-                    frame * effectData.particleWidth,
-                    particle.option * effectData.particleHeight,
-                    effectData.particleWidth,
-                    effectData.particleHeight
-                ),
-                Color.White * particle.alpha,
-                particle.rotation,
-                new Vector2(effectData.particleWidth / 2, effectData.particleHeight / 2),
-                SpriteEffects.None,
-                drawDepth + depthOffset
-            );
+                float depthOffset = GetDepthOffset(effectData);
+
+                spriteBatch.Draw(
+                    effectData.spriteSheet,
+                    new Rectangle(
+                        Utility.Vector2ToPoint(isScreenSpace ? particle.position : Game1.GlobalToLocal(particle.position)),
+                        new Point((int)(effectData.particleWidth * particle.scale), (int)(effectData.particleHeight * particle.scale))
+                    ),
+                    new Rectangle(
+                        frame * effectData.particleWidth,
+                        particle.option * effectData.particleHeight,
+                        effectData.particleWidth,
+                        effectData.particleHeight
+                    ),
+                    Color.White * particle.alpha,
+                    particle.rotation,
+                    new Vector2(effectData.particleWidth / 2, effectData.particleHeight / 2),
+                    SpriteEffects.None,
+                    drawDepth + depthOffset
+                );
+            } 
+            catch (Exception e)
+            {
+                ModEntry.monitor.Log($"Error drawing particle for effect '{effectData.key}': {e.Message}", LogLevel.Error);
+                UnloadEffect(effectData.key);
+            }
         }
 
         private static float GetDepthOffset(ParticleEffectData effectData)
@@ -238,23 +270,38 @@ namespace ParticleFramework.Framework.Managers
 
         private static ParticleData GenerateParticle(ParticleEffectData effectData, Vector2 center)
         {
-            var newParticle = new ParticleData();
-            newParticle.lifespan = Game1.random.Next(effectData.minLifespan, effectData.maxLifespan + 1);
-            newParticle.scale = effectData.minParticleScale + (float)Game1.random.NextDouble() * (effectData.maxParticleScale - effectData.minParticleScale);
-            newParticle.alpha = effectData.minAlpha + (float)Game1.random.NextDouble() * (effectData.maxAlpha - effectData.minAlpha);
-            newParticle.rotationRate = effectData.minRotationRate + (float)Game1.random.NextDouble() * (effectData.maxRotationRate - effectData.minRotationRate);
-            newParticle.option = Game1.random.Next(effectData.spriteSheet.Height / effectData.particleHeight);
-
-            if (effectData.fieldOuterRadius <= 0)
+            try
             {
-                newParticle.position = center - new Vector2(effectData.fieldOuterWidth, effectData.fieldOuterHeight) / 2 + GetRandomOffset(effectData);
-            }
-            else
-            {
-                newParticle.position = center + GetCirclePos(effectData);
-            }
+                if (effectData.spriteSheet == null)
+                {
+                    ModEntry.monitor.Log($"Error generating particle: Sprite sheet is null for particle '{effectData.key}'", LogLevel.Error);
+                    UnloadEffect(effectData.key);
+                    return null;
+                }
+                var newParticle = new ParticleData();
+                newParticle.lifespan = Game1.random.Next(effectData.minLifespan, effectData.maxLifespan + 1);
+                newParticle.scale = effectData.minParticleScale + (float)Game1.random.NextDouble() * (effectData.maxParticleScale - effectData.minParticleScale);
+                newParticle.alpha = effectData.minAlpha + (float)Game1.random.NextDouble() * (effectData.maxAlpha - effectData.minAlpha);
+                newParticle.rotationRate = effectData.minRotationRate + (float)Game1.random.NextDouble() * (effectData.maxRotationRate - effectData.minRotationRate);
+                newParticle.option = Game1.random.Next(effectData.spriteSheet.Height / effectData.particleHeight);
 
-            return newParticle;
+                if (effectData.fieldOuterRadius <= 0)
+                {
+                    newParticle.position = center - new Vector2(effectData.fieldOuterWidth, effectData.fieldOuterHeight) / 2 + GetRandomOffset(effectData);
+                }
+                else
+                {
+                    newParticle.position = center + GetCirclePos(effectData);
+                }
+
+                return newParticle;
+            }
+            catch (Exception e)
+            {
+                ModEntry.monitor.Log($"Error generating particle for effect '{effectData.key}': {e}", LogLevel.Error);
+                UnloadEffect(effectData.key);
+                return null;
+            }
         }
 
         private static Vector2 GetRandomOffset(ParticleEffectData effectData)
@@ -328,11 +375,59 @@ namespace ParticleFramework.Framework.Managers
 
         public void LoadEffects()
         {
-            effectDict = Game1.content.Load<Dictionary<string, ParticleEffectData>>(dictPath);
-            foreach (var key in effectDict.Keys)
+            try
             {
-                effectDict[key].key = key;
-                effectDict[key].spriteSheet = Game1.content.Load<Texture2D>(effectDict[key].spriteSheetPath);
+                foreach (var path in dictPaths)
+                {
+                    var dict = Game1.content.Load<Dictionary<string, ParticleEffectData>>(path);
+                    foreach (var kvp in dict)
+                    {
+                        try
+                        {
+                            kvp.Value.key = kvp.Key;
+                            kvp.Value.spriteSheet = Game1.content.Load<Texture2D>(kvp.Value.spriteSheetPath);
+                        }
+                        catch (Exception e)
+                        {
+                            ModEntry.monitor.Log($"Error loading particle effect with key '{kvp.Key}': {e}", LogLevel.Error);
+                            UnloadEffect(kvp.Key);
+                        }
+                    }
+                    // Merge the loaded dictionary with the existing one
+                    foreach (var kvp in dict)
+                    {
+                        effectDict[kvp.Key] = kvp.Value;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ModEntry.monitor.Log($"Error loading particle effects: {e}", LogLevel.Error);
+            }
+        }
+
+        public void AddCustomDictPath(string customDictPath)
+        {
+            dictPaths.Add(customDictPath);
+        }
+
+        public static void UnloadEffect(string key)
+        {
+            try
+            {
+                if (effectDict.ContainsKey(key))
+                {
+                    effectDict.Remove(key);
+                    ModEntry.monitor.Log($"Successfully unloaded particle effect '{key}'.", LogLevel.Warn);
+                }
+                else
+                {
+                    ModEntry.monitor.Log($"Error unloading particle effect '{key}':  Not found in the dictionary.", LogLevel.Warn);
+                }
+            }
+            catch (Exception e)
+            {
+                ModEntry.monitor.Log($"Error unloading particle effect '{key}': {e}", LogLevel.Error);
             }
         }
 
