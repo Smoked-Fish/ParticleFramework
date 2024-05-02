@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using ParticleFramework.Framework.Data;
 using StardewValley;
+using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,24 @@ namespace ParticleFramework.Framework.Managers
         public static readonly string dictPath = "Mods/Espy.ParticleFramework/dict";
         public static Dictionary<string, ParticleEffectData> effectDict = new Dictionary<string, ParticleEffectData>();
 
-        public static Dictionary<long, EntityParticleData> farmerEffectDict = new Dictionary<long, EntityParticleData>();
-        public static Dictionary<string, EntityParticleData> npcEffectDict = new Dictionary<string, EntityParticleData>();
-        public static Dictionary<string, EntityParticleData> locationEffectDict = new Dictionary<string, EntityParticleData>();
-        public static EntityParticleData screenEffectDict = new EntityParticleData();
+        public static Dictionary<string, List<string>> objectDict = new Dictionary<string, List<string>>();
         public static Dictionary<string, EntityParticleData> objectEffectDict = new Dictionary<string, EntityParticleData>();
 
-        public static Dictionary<Point, List<ParticleEffectData>> screenDict = new Dictionary<Point, List<ParticleEffectData>>();
-        public static Dictionary<string, List<string>> NPCDict = new Dictionary<string, List<string>>();
+        public static Dictionary<string, List<string>> furnitureDict = new Dictionary<string, List<string>>();
+        public static Dictionary<string, EntityParticleData> furnitureEffectDict = new Dictionary<string, EntityParticleData>();
+
         public static Dictionary<long, List<string>> farmerDict = new Dictionary<long, List<string>>();
+        public static Dictionary<long, EntityParticleData> farmerEffectDict = new Dictionary<long, EntityParticleData>();
+
+        public static Dictionary<string, List<string>> NPCDict = new Dictionary<string, List<string>>();
+        public static Dictionary<string, EntityParticleData> npcEffectDict = new Dictionary<string, EntityParticleData>();
+
         public static Dictionary<string, Dictionary<Point, List<ParticleEffectData>>> locationDict = new Dictionary<string, Dictionary<Point, List<ParticleEffectData>>>();
+        public static Dictionary<string, EntityParticleData> locationEffectDict = new Dictionary<string, EntityParticleData>();
+
+        public static Dictionary<Point, List<ParticleEffectData>> screenDict = new Dictionary<Point, List<ParticleEffectData>>();
+        public static EntityParticleData screenEffectDict = new EntityParticleData();
+
 
         public static void ShowFarmerParticleEffect(SpriteBatch b, Farmer instance, string key, ParticleEffectData ped)
         {
@@ -59,19 +68,35 @@ namespace ParticleFramework.Framework.Managers
         }
         public static void ShowObjectParticleEffect(SpriteBatch b, Object instance, int x, int y, string key, ParticleEffectData ped)
         {
-            var oKey = instance.Name + "|" + x + "," + y;
-            if (!objectEffectDict.TryGetValue(oKey, out EntityParticleData entityParticleData))
+            if (!objectEffectDict.TryGetValue(instance.QualifiedItemId, out EntityParticleData entityParticleData))
             {
                 entityParticleData = new EntityParticleData();
-                objectEffectDict[oKey] = entityParticleData;
+                objectEffectDict[instance.QualifiedItemId] = entityParticleData;
             }
             if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
             {
                 particleList = new List<ParticleData>();
-                objectEffectDict[oKey].particleDict[key] = particleList;
+                objectEffectDict[instance.QualifiedItemId].particleDict[key] = particleList;
             }
             ShowParticleEffect(b, particleList, ped, instance.GetBoundingBoxAt(x, y).Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), Math.Max(0f, ((y + 1) * 64 - 24) / 10000f) + x * 1E-05f);
-            objectEffectDict[oKey] = entityParticleData;
+            objectEffectDict[instance.QualifiedItemId] = entityParticleData;
+        }
+
+        public static void ShowFurnitureParticleEffect(SpriteBatch b, Furniture instance, int x, int y, string key, ParticleEffectData ped)
+        {
+            if (!furnitureEffectDict.TryGetValue(instance.QualifiedItemId, out EntityParticleData entityParticleData))
+            {
+                entityParticleData = new EntityParticleData();
+                furnitureEffectDict[instance.QualifiedItemId] = entityParticleData;
+            }
+            if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
+            {
+                particleList = new List<ParticleData>();
+                furnitureEffectDict[instance.QualifiedItemId].particleDict[key] = particleList;
+            }
+            ShowParticleEffect(b, particleList, ped, instance.boundingBox.Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY),
+                ((int)instance.furniture_type.Value == 12) ? (2E-09f + (instance.boundingBox.Y / 64) / 100000f) : ((float)(instance.boundingBox.Value.Bottom - (((int)instance.furniture_type.Value == 6 || (int)instance.furniture_type.Value == 17 || (int)instance.furniture_type.Value == 13) ? 48 : 8)) / 10000f));
+            furnitureEffectDict[instance.QualifiedItemId] = entityParticleData;
         }
         public static void ShowLocationParticleEffect(SpriteBatch b, GameLocation instance, ParticleEffectData ped)
         {
