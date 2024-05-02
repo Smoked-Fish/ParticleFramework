@@ -12,6 +12,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ParticleFramework
@@ -26,8 +27,6 @@ namespace ParticleFramework
 
         // Managers
         internal static ApiManager apiManager;
-        internal static ParticleEffectManager particleEffectManager;
-
         public override void Entry(IModHelper helper)
         {
             // Setup i18n
@@ -37,29 +36,25 @@ namespace ParticleFramework
             monitor = Monitor;
             modHelper = helper;
             multiplayer = helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
-
+            
             // Setup the config
             modConfig = Helper.ReadConfig<ModConfig>();
 
             // Setup the manager
             apiManager = new ApiManager(monitor);
-            particleEffectManager = new ParticleEffectManager();
 
             // Apply the patches
             var harmony = new Harmony(this.ModManifest.UniqueID);
 
             new CodePatches(harmony).Apply();
 
-
-
             // Hook into GameLoop events
-            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             helper.Events.GameLoop.DayStarted += OnDayStarted;
             helper.Events.GameLoop.TimeChanged += OnTimeChanged;
             helper.Events.Display.RenderedWorld += OnRenderedWorld;
             helper.Events.Display.RenderedHud += OnRenderedHud;
-
             helper.Events.Content.AssetRequested += OnAssetRequested;
         }
 
@@ -71,15 +66,20 @@ namespace ParticleFramework
                 configApi.Register(ModManifest, () => modConfig = new ModConfig(), () => Helper.WriteConfig(modConfig));
 
                 AddOption(configApi, nameof(modConfig.EnableMod));
-
             }
         }
 
         private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
         {
-            if (modConfig.EnableMod && e.NameWithoutLocale.IsEquivalentTo(ParticleEffectManager.dictPath))
+            if (modConfig.EnableMod)
             {
-                e.LoadFrom(() => new Dictionary<string, ParticleEffectData>(), AssetLoadPriority.Exclusive);
+                foreach (var path in ParticleEffectManager.dictPaths)
+                {
+                    if (e.NameWithoutLocale.IsEquivalentTo(path))
+                    {
+                        e.LoadFrom(() => new Dictionary<string, ParticleEffectData>(), AssetLoadPriority.Exclusive);
+                    }
+                }
             }
         }
 
@@ -135,22 +135,22 @@ namespace ParticleFramework
 
         public override object GetApi()
         {
-            return new ParticleEffectsAPI();
+            return new ParticleFrameworkApi();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
-            particleEffectManager.LoadEffects();
+            ParticleEffectManager.LoadEffects();
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            particleEffectManager.LoadEffects();
+            ParticleEffectManager.LoadEffects();
         }
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            particleEffectManager.LoadEffects();
+            ParticleEffectManager.LoadEffects();
         }
         private void AddOption(IGenericModConfigMenuApi configApi, string name)
         {
