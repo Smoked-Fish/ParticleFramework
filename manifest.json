@@ -1,7 +1,7 @@
 {
   "Name": "Particle Framework",
   "Author": "Espy",
-  "Version": "1.1.0",
+  "Version": "1.2.0",
   "Description": "Particle Framework",
   "UniqueID": "Espy.ParticleFramework",
   "EntryDll": "ParticleFramework.dll",
