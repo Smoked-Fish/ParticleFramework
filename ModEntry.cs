@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ParticleFramework.Framework.Api;
 using ParticleFramework.Framework.Data;
 using ParticleFramework.Framework.Interfaces;
@@ -12,7 +11,6 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace ParticleFramework
