@@ -23,7 +23,7 @@ namespace ParticleFramework.Framework.Managers
                 return false;
             }
 
-            _monitor.Log("Successfully hooked into spacechase0.GenericModConfigMenu.", LogLevel.Debug);
+            _monitor.Log("Successfully hooked into spacechase0.GenericModConfigMenu.", LogLevel.Trace);
             return true;
         }
 
