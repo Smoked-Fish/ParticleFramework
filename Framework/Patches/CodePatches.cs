@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ParticleFramework.Framework.Managers;
 using StardewValley;
 using System.Collections.Generic;
 using Object = StardewValley.Object;
@@ -21,45 +22,45 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ModEntry.farmerDict.ContainsKey(__instance.UniqueMultiplayerID))
+            if (ParticleEffectManager.farmerDict.ContainsKey(__instance.UniqueMultiplayerID))
             {
-                foreach (var effect in ModEntry.farmerDict[__instance.UniqueMultiplayerID])
+                foreach (var effect in ParticleEffectManager.farmerDict[__instance.UniqueMultiplayerID])
                 {
-                    if (ModEntry.effectDict.ContainsKey(effect))
+                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
                     {
-                        ModEntry.ShowFarmerParticleEffect(b, __instance, effect, ModEntry.effectDict[effect]);
+                        ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, effect, ParticleEffectManager.effectDict[effect]);
                     }
                 }
             }
-            foreach (var kvp in ModEntry.effectDict)
+            foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 switch (kvp.Value.type.ToLower())
                 {
                     case "hat":
                         if (__instance.hat.Value != null && __instance.hat.Value.Name == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                     case "shirt":
                         if (__instance.shirt.Value.ToString() == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                     case "pants":
                         if (__instance.pants.Value.ToString() == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                     case "boots":
                         if (__instance.boots.Value != null && __instance.boots.Value.Name == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                     case "tool":
                         if (__instance.CurrentItem is Tool && __instance.CurrentItem.Name == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                     case "ring":
                         if (__instance.leftRing.Value != null && __instance.leftRing.Value.Name == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         else if (__instance.rightRing.Value != null && __instance.rightRing.Value.Name == kvp.Value.name)
-                            ModEntry.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
                         break;
                 }
             }
@@ -68,11 +69,11 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            foreach (var kvp in ModEntry.effectDict)
+            foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "object" && kvp.Value.name == __instance.Name)
                 {
-                    ModEntry.ShowObjectParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
                 }
             }
         }
@@ -80,21 +81,21 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ModEntry.NPCDict.ContainsKey(__instance.Name))
+            if (ParticleEffectManager.NPCDict.ContainsKey(__instance.Name))
             {
-                foreach (var effect in ModEntry.NPCDict[__instance.Name])
+                foreach (var effect in ParticleEffectManager.NPCDict[__instance.Name])
                 {
-                    if (ModEntry.effectDict.ContainsKey(effect))
+                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
                     {
-                        ModEntry.ShowNPCParticleEffect(b, __instance, effect, ModEntry.effectDict[effect]);
+                        ParticleEffectManager.ShowNPCParticleEffect(b, __instance, effect, ParticleEffectManager.effectDict[effect]);
                     }
                 }
             }
-            foreach (var kvp in ModEntry.effectDict)
+            foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "npc" && kvp.Value.name == __instance.Name)
                 {
-                    ModEntry.ShowNPCParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowNPCParticleEffect(b, __instance, kvp.Key, kvp.Value);
                 }
             }
         }
