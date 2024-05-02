@@ -6,7 +6,7 @@ namespace API
     /// <summary>
     /// Provides methods for managing particle effects.
     /// </summary>
-    public interface IParticleEffectApi
+    public interface IParticleFrameworkApi
     {
         /// <summary>
         /// Adds a custom dictionary path for loading particle effect data.
