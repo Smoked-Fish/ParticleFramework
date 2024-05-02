@@ -1,36 +1,37 @@
 ### Particle Effect Variables
-- **key**: The unique key for the particle effect
-- **type**: The type of thing to target; one of "object", "furniture", "npc", "location", "hat", "shirt", "boots", "pants", "tool", "ring"
-- **name**: The qualified item id or name of the target
-- **movementType**: How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"
-- **movementSpeed**: How many pixels a particle moves per tick
-- **acceleration**: How many pixels/tick the movement speed increases per tick
-- **frameSpeed**: How many animation frames change per tick (see textures below)
-- **restrictOuter**: Whether particles disappear when they move outside the field (default false)
-- **restrictInner**: Whether particles disappear when they move inside the inner boundary (default false)
-- **belowOffset**: If set to > 0, allows particles to move behind the thing by the given layer depth offset (default -1)
-- **aboveOffset**: If set to > 0, allows particles to move in front of the thing by the given layer depth offset (default 0.001)
-- **minRotationRate**: If set to > 0, allows particles to rotate around their center
-- **maxRotationRate**: If set to > 0, allows particles to rotate around their center
-- **minAlpha**: Allows transparency (default: 1)
-- **maxAlpha**: Allows transparency (default: 1)
-- **particleWidth**: The width of each particle on the sprite sheet (see textures below)
-- **particleHeight**: The height of each particle on the sprite sheet (see textures below)
-- **fieldOuterRadius**: If set to > 0, specifies a circular particle spawn field and sets the outer radius of the field
-- **fieldInnerRadius**: If set to > 0, sets the inner radius of the field
-- **fieldOuterWidth**: If fieldOuterRadius is set to 0, designates the outer width of the rectangular particle field
-- **fieldOuterHeight**: If fieldOuterRadius is set to 0, designates the outer height of the rectangular particle field
-- **fieldInnerWidth**: If set to > 0, sets the inner width of the rectangular particle field
-- **fieldInnerHeight**: If set to > 0, sets the inner height of the rectangular particle field
-- **fieldOffsetX**: For locations, specifies the X coordinate of the field center on the map; for everything else, specifies the field X offset from the thing's center
-- **fieldOffsetY**: For locations, specifies the Y coordinate of the field center on the map; for everything else, specifies the field Y offset from the thing's center
-- **maxParticles**: Sets the maximum number of simultaneous particles in a field
-- **minLifespan**: Minimum number of ticks a particle lives
-- **maxLifespan**: Maximum number of ticks a particle lives
-- **minParticleScale**: Minimum scale of each particle in the field
-- **maxParticleScale**: Maximum scale of each particle in the field
-- **particleChance**: The chance (0 to 1) that a new particle will be created, checked each tick
-- **spriteSheetPath**: The fake path to this particle's spritesheet, caught by your Content Patcher pack (as in the example above).
+###### **key**: The unique key for the particle effect
+###### **type**: The type of thing to target; one of "object", "furniture", "npc", "location", "hat", "shirt", "boots", "pants", "tool", "ring"
+###### **name**: The qualified item id or name of the target
+###### **movementType**: How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"
+###### **movementSpeed**: How many pixels a particle moves per tick
+###### **acceleration**: How many pixels/tick the movement speed increases per tick
+###### **frameSpeed**: How many animation frames change per tick (see textures below)
+###### **restrictOuter**: Whether particles disappear when they move outside the field (default false)
+###### **restrictInner**: Whether particles disappear when they move inside the inner boundary (default false)
+###### **belowOffset**: If set to > 0, allows particles to move behind the thing by the given layer depth offset (default -1)
+###### **aboveOffset**: If set to > 0, allows particles to move in front of the thing by the given layer depth offset (default 0.001)
+###### **minRotationRate**: If set to > 0, allows particles to rotate around their center
+###### **maxRotationRate**: If set to > 0, allows particles to rotate around their center
+###### **minAlpha**: Allows transparency (default: 1)
+###### **maxAlpha**: Allows transparency (default: 1)
+###### **particleWidth**: The width of each particle on the sprite sheet
+###### **particleHeight**: The height of each particle on the sprite sheet
+###### **fieldOuterRadius**: If set to > 0, specifies a circular particle spawn field and sets the outer radius of the field
+###### **fieldInnerRadius**: If set to > 0, sets the inner radius of the field
+###### **fieldOuterWidth**: If fieldOuterRadius is set to 0, designates the outer width of the rectangular particle field
+###### **fieldOuterHeight**: If fieldOuterRadius is set to 0, designates the outer height of the rectangular particle field
+###### **fieldInnerWidth**: If set to > 0, sets the inner width of the rectangular particle field
+###### **fieldInnerHeight**: If set to > 0, sets the inner height of the rectangular particle field
+###### **fieldOffsetX**: For locations, specifies the X coordinate of the field center on the map; for everything else, specifies the field X offset from the thing's center
+###### **fieldOffsetY**: For locations, specifies the Y coordinate of the field center on the map; for everything else, specifies the field Y offset from the thing's center
+###### **maxParticles**: Sets the maximum number of simultaneous particles in a field
+###### **minLifespan**: Minimum number of ticks a particle lives
+###### **maxLifespan**: Maximum number of ticks a particle lives
+###### **minParticleScale**: Minimum scale of each particle in the field
+###### **maxParticleScale**: Maximum scale of each particle in the field
+###### **particleChance**: The chance (0 to 1) that a new particle will be created, checked each tick
+###### **spriteSheetPath**: The to this particle's spritesheet (check examples below).
+
 
 
 
