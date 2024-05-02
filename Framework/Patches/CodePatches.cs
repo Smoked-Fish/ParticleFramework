@@ -6,6 +6,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using System.Collections.Generic;
+using System.Linq;
 using Object = StardewValley.Object;
 
 namespace ParticleFramework.Framework.Patches
@@ -27,16 +28,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.farmerDict.ContainsKey(__instance.UniqueMultiplayerID))
-            {
-                foreach (var effect in ParticleEffectManager.farmerDict[__instance.UniqueMultiplayerID])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 switch (kvp.Value.type.ToLower())
@@ -74,16 +66,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.objectDict.ContainsKey(__instance.QualifiedItemId))
-            {
-                foreach (var effect in ParticleEffectManager.objectDict[__instance.QualifiedItemId])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "object" && kvp.Value.name == __instance.QualifiedItemId)
@@ -96,16 +79,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.NPCDict.ContainsKey(__instance.Name))
-            {
-                foreach (var effect in ParticleEffectManager.NPCDict[__instance.Name])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowNPCParticleEffect(b, __instance, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "npc" && kvp.Value.name == __instance.Name)
@@ -119,16 +93,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.furnitureDict.ContainsKey(__instance.QualifiedItemId))
-            {
-                foreach (var effect in ParticleEffectManager.furnitureDict[__instance.QualifiedItemId])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
@@ -142,16 +107,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.furnitureDict.ContainsKey(__instance.QualifiedItemId))
-            {
-                foreach (var effect in ParticleEffectManager.furnitureDict[__instance.QualifiedItemId])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
@@ -166,16 +122,7 @@ namespace ParticleFramework.Framework.Patches
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.furnitureDict.ContainsKey(__instance.QualifiedItemId))
-            {
-                foreach (var effect in ParticleEffectManager.furnitureDict[__instance.QualifiedItemId])
-                {
-                    if (ParticleEffectManager.effectDict.ContainsKey(effect))
-                    {
-                        ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, effect, ParticleEffectManager.effectDict[effect]);
-                    }
-                }
-            }
+
             foreach (var kvp in ParticleEffectManager.effectDict)
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
@@ -183,6 +130,7 @@ namespace ParticleFramework.Framework.Patches
                     ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
                 }
             }
+
         }
     }
 }
