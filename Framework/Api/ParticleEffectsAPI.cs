@@ -16,6 +16,10 @@ namespace ParticleFramework.Framework.Api
         public void EndFarmerParticleEffect(long farmerID, string key);
         public void BeginNPCParticleEffect(string npc, string key);
         public void EndNPCParticleEffect(string npc, string key);
+        public void BeginObjectParticleEffect(string objID, string key);
+        public void EndObjectParticleEffect(string onjID, string key);
+        public void BeginFurnitureParticleEffect(string furnitureID, string key);
+        public void EndFurnitureParticleEffect(string furnitureID, string key);
         public void BeginLocationParticleEffect(string location, int x, int y, string key);
         public void EndLocationParticleEffect(string location, int x, int y, string key);
         public List<string> GetEffectNames();
@@ -34,6 +38,30 @@ namespace ParticleFramework.Framework.Api
         {
             if (ParticleEffectManager.farmerDict.ContainsKey(farmerID))
                 ParticleEffectManager.farmerDict[farmerID].Remove(key);
+        }
+        public void BeginObjectParticleEffect(string objID, string key)
+        {
+            if (!ParticleEffectManager.objectDict.ContainsKey(objID))
+                ParticleEffectManager.objectDict.Add(objID, new List<string>());
+            if (!ParticleEffectManager.objectDict[objID].Contains(key))
+                ParticleEffectManager.objectDict[objID].Add(key);
+        }
+        public void EndObjectParticleEffect(string objID, string key)
+        {
+            if (ParticleEffectManager.objectDict.ContainsKey(objID))
+                ParticleEffectManager.objectDict[objID].Remove(key);
+        }
+        public void BeginFurnitureParticleEffect(string furnitureID, string key)
+        {
+            if (!ParticleEffectManager.furnitureDict.ContainsKey(furnitureID))
+                ParticleEffectManager.furnitureDict.Add(furnitureID, new List<string>());
+            if (!ParticleEffectManager.furnitureDict[furnitureID].Contains(key))
+                ParticleEffectManager.furnitureDict[furnitureID].Add(key);
+        }
+        public void EndFurnitureParticleEffect(string furnitureID, string key)
+        {
+            if (ParticleEffectManager.furnitureDict.ContainsKey(furnitureID))
+                ParticleEffectManager.furnitureDict[furnitureID].Remove(key);
         }
         public void BeginNPCParticleEffect(string npc, string key)
         {
