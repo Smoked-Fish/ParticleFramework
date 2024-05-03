@@ -1,6 +1,3 @@
-using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
-
 namespace ParticleFramework
 {
     internal class ModConfig

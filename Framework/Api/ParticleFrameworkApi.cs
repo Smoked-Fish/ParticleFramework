@@ -1,15 +1,10 @@
-﻿using ParticleFramework.Framework.Data;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using ParticleFramework.Framework.Data;
+using ParticleFramework.Framework.Managers;
+using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ParticleFramework.Framework.Managers;
-using StardewModdingAPI;
-using StardewValley;
-using System.Threading;
 
 namespace ParticleFramework.Framework.Api
 {

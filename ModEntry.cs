@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using Microsoft.Xna.Framework;
+﻿global using SObject = StardewValley.Object;
+using HarmonyLib;
 using ParticleFramework.Framework.Api;
 using ParticleFramework.Framework.Data;
 using ParticleFramework.Framework.Interfaces;

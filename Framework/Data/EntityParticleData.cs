@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ParticleFramework.Framework.Data
 {
     public class EntityParticleData
     {
-        public Dictionary<string, List<ParticleData>> particleDict = new Dictionary<string, List<ParticleData>>();
+        public Dictionary<string, List<ParticleData>> particleDict = [];
     }
 
     public class ParticleData

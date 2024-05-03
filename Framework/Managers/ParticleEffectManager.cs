@@ -1,17 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ParticleFramework.Framework.Data;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Object = StardewValley.Object;
 
 namespace ParticleFramework.Framework.Managers
 {
@@ -23,14 +17,14 @@ namespace ParticleFramework.Framework.Managers
             "Mods/aedenthorn.ParticleEffects/dict"
         };
 
-        public static Dictionary<string, ParticleEffectData> effectDict = new Dictionary<string, ParticleEffectData>();
+        public static Dictionary<string, ParticleEffectData> effectDict = [];
 
-        public static Dictionary<string, EntityParticleData> objectEffectDict = new Dictionary<string, EntityParticleData>();
-        public static Dictionary<string, EntityParticleData> furnitureEffectDict = new Dictionary<string, EntityParticleData>();
-        public static Dictionary<long, EntityParticleData> farmerEffectDict = new Dictionary<long, EntityParticleData>();
-        public static Dictionary<string, EntityParticleData> npcEffectDict = new Dictionary<string, EntityParticleData>();
-        public static Dictionary<string, EntityParticleData> locationEffectDict = new Dictionary<string, EntityParticleData>();
-        public static EntityParticleData screenEffectDict = new EntityParticleData();
+        public static Dictionary<string, EntityParticleData> objectEffectDict = [];
+        public static Dictionary<string, EntityParticleData> furnitureEffectDict = [];
+        public static Dictionary<long, EntityParticleData> farmerEffectDict = [];
+        public static Dictionary<string, EntityParticleData> npcEffectDict = [];
+        public static Dictionary<string, EntityParticleData> locationEffectDict = [];
+        public static EntityParticleData screenEffectDict = new();
 
 
         public static void ShowFarmerParticleEffect(SpriteBatch b, Farmer instance, string key, ParticleEffectData ped)
@@ -63,7 +57,7 @@ namespace ParticleFramework.Framework.Managers
             ShowParticleEffect(b, particleList, ped, instance.GetBoundingBox().Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), 1f);
             npcEffectDict[instance.Name] = entityParticleData;
         }
-        public static void ShowObjectParticleEffect(SpriteBatch b, Object instance, int x, int y, string key, ParticleEffectData ped)
+        public static void ShowObjectParticleEffect(SpriteBatch b, SObject instance, int x, int y, string key, ParticleEffectData ped)
         {
             if (!objectEffectDict.TryGetValue(instance.QualifiedItemId, out EntityParticleData entityParticleData))
             {

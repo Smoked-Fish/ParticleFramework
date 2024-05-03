@@ -1,13 +1,8 @@
 ﻿using HarmonyLib;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ParticleFramework.Framework.Managers;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
-using System.Collections.Generic;
-using System.Linq;
-using Object = StardewValley.Object;
 
 namespace ParticleFramework.Framework.Patches
 {
@@ -62,7 +57,7 @@ namespace ParticleFramework.Framework.Patches
                 }
             }
         }
-        public static void ObjectDrawPostfix(Object __instance, SpriteBatch spriteBatch, int x, int y)
+        public static void ObjectDrawPostfix(SObject __instance, SpriteBatch spriteBatch, int x, int y)
         {
             if (!ModEntry.modConfig.EnableMod)
                 return;

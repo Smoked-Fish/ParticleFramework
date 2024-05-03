@@ -1,5 +1,4 @@
-﻿using ParticleFramework.Framework.Interfaces;
-using StardewModdingAPI;
+﻿using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 
