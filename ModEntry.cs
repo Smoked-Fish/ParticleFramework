@@ -34,12 +34,12 @@ namespace ParticleFramework
             monitor = Monitor;
             modHelper = helper;
             multiplayer = helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
-            
+
             // Setup the config
             modConfig = Helper.ReadConfig<ModConfig>();
 
             // Setup the manager
-            apiManager = new ApiManager(monitor);
+            apiManager = new ApiManager();
 
             // Apply the patches
             var harmony = new Harmony(this.ModManifest.UniqueID);
@@ -58,9 +58,9 @@ namespace ParticleFramework
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            if (Helper.ModRegistry.IsLoaded("spacechase0.GenericModConfigMenu") && apiManager.HookIntoGenericModConfigMenu(Helper))
+            var configApi = apiManager.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu", false);
+            if (Helper.ModRegistry.IsLoaded("spacechase0.GenericModConfigMenu") && configApi != null)
             {
-                var configApi = apiManager.GetGenericModConfigMenuApi();
                 configApi.Register(ModManifest, () => modConfig = new ModConfig(), () => Helper.WriteConfig(modConfig));
 
                 AddOption(configApi, nameof(modConfig.EnableMod));
@@ -85,13 +85,6 @@ namespace ParticleFramework
         {
             if (!modConfig.EnableMod)
                 return;
-            foreach (var kvp in ParticleEffectManager.screenDict)
-            {
-                foreach (var effect in kvp.Value)
-                {
-                    ParticleEffectManager.ShowScreenParticleEffect(e.SpriteBatch, effect);
-                }
-            }
             foreach (var key in ParticleEffectManager.effectDict.Keys)
             {
                 var ped = ParticleEffectManager.effectDict[key];
@@ -108,16 +101,6 @@ namespace ParticleFramework
         {
             if (!modConfig.EnableMod)
                 return;
-            if (ParticleEffectManager.locationDict.TryGetValue(Game1.currentLocation.Name, out Dictionary<Point, List<ParticleEffectData>> dict))
-            {
-                foreach (var kvp in dict)
-                {
-                    foreach (var effect in kvp.Value)
-                    {
-                        ParticleEffectManager.ShowLocationParticleEffect(e.SpriteBatch, Game1.currentLocation, effect);
-                    }
-                }
-            }
             foreach (var key in ParticleEffectManager.effectDict.Keys)
             {
                 var ped = ParticleEffectManager.effectDict[key];
@@ -154,49 +137,55 @@ namespace ParticleFramework
         {
             PropertyInfo propertyInfo = typeof(ModConfig).GetProperty(name);
             if (propertyInfo == null)
+            {
+                Monitor.Log($"Error: Property '{name}' not found in ModConfig.", LogLevel.Error);
                 return;
+            }
 
             Func<string> getName = () => I18n.GetByKey($"Config.{typeof(ModEntry).Namespace}.{name}.Name");
             Func<string> getDescription = () => I18n.GetByKey($"Config.{typeof(ModEntry).Namespace}.{name}.Description");
 
             if (getName == null || getDescription == null)
+            {
+                Monitor.Log($"Error: Localization keys for '{name}' not found.", LogLevel.Error);
                 return;
+            }
 
-            if (propertyInfo.PropertyType == typeof(bool))
+            var getterMethod = propertyInfo.GetGetMethod();
+            var setterMethod = propertyInfo.GetSetMethod();
+
+            if (getterMethod == null || setterMethod == null)
             {
-                Func<bool> getter = () => (bool)propertyInfo.GetValue(modConfig);
-                Action<bool> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddBoolOption(ModManifest, getter, setter, getName, getDescription);
+                Monitor.Log($"Error: The get/set methods are null for property '{name}'.", LogLevel.Error);
+                return;
             }
-            else if (propertyInfo.PropertyType == typeof(int))
+
+            var getter = Delegate.CreateDelegate(typeof(Func<>).MakeGenericType(propertyInfo.PropertyType), modConfig, getterMethod);
+            var setter = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(propertyInfo.PropertyType), modConfig, setterMethod);
+
+            switch (propertyInfo.PropertyType.Name)
             {
-                Func<int> getter = () => (int)propertyInfo.GetValue(modConfig);
-                Action<int> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddNumberOption(ModManifest, getter, setter, getName, getDescription);
-            }
-            else if (propertyInfo.PropertyType == typeof(float))
-            {
-                Func<float> getter = () => (float)propertyInfo.GetValue(modConfig);
-                Action<float> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddNumberOption(ModManifest, getter, setter, getName, getDescription);
-            }
-            else if (propertyInfo.PropertyType == typeof(string))
-            {
-                Func<string> getter = () => (string)propertyInfo.GetValue(modConfig);
-                Action<string> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddTextOption(ModManifest, getter, setter, getName, getDescription);
-            }
-            else if (propertyInfo.PropertyType == typeof(SButton))
-            {
-                Func<SButton> getter = () => (SButton)propertyInfo.GetValue(modConfig);
-                Action<SButton> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddKeybind(ModManifest, getter, setter, getName, getDescription);
-            }
-            else if (propertyInfo.PropertyType == typeof(KeybindList))
-            {
-                Func<KeybindList> getter = () => (KeybindList)propertyInfo.GetValue(modConfig);
-                Action<KeybindList> setter = value => propertyInfo.SetValue(modConfig, value);
-                configApi.AddKeybindList(ModManifest, getter, setter, getName, getDescription);
+                case nameof(Boolean):
+                    configApi.AddBoolOption(ModManifest, (Func<bool>)getter, (Action<bool>)setter, getName, getDescription);
+                    break;
+                case nameof(Int32):
+                    configApi.AddNumberOption(ModManifest, (Func<int>)getter, (Action<int>)setter, getName, getDescription);
+                    break;
+                case nameof(Single):
+                    configApi.AddNumberOption(ModManifest, (Func<float>)getter, (Action<float>)setter, getName, getDescription);
+                    break;
+                case nameof(String):
+                    configApi.AddTextOption(ModManifest, (Func<string>)getter, (Action<string>)setter, getName, getDescription);
+                    break;
+                case nameof(SButton):
+                    configApi.AddKeybind(ModManifest, (Func<SButton>)getter, (Action<SButton>)setter, getName, getDescription);
+                    break;
+                case nameof(KeybindList):
+                    configApi.AddKeybindList(ModManifest, (Func<KeybindList>)getter, (Action<KeybindList>)setter, getName, getDescription);
+                    break;
+                default:
+                    Monitor.Log($"Error: Unsupported property type '{propertyInfo.PropertyType.Name}' for '{name}'.", LogLevel.Error);
+                    break;
             }
         }
     }
