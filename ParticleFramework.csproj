@@ -10,6 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Framework\Interfaces\Internal\**" />
+      <EmbeddedResource Remove="Framework\Interfaces\Internal\**" />
+      <None Remove="Framework\Interfaces\Internal\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <AdditionalFiles Remove="i18n\default.json" />
     </ItemGroup>
 
