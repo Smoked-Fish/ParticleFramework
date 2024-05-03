@@ -25,22 +25,11 @@ namespace ParticleFramework.Framework.Managers
 
         public static Dictionary<string, ParticleEffectData> effectDict = new Dictionary<string, ParticleEffectData>();
 
-        public static Dictionary<string, List<string>> objectDict = new Dictionary<string, List<string>>();
         public static Dictionary<string, EntityParticleData> objectEffectDict = new Dictionary<string, EntityParticleData>();
-
-        public static Dictionary<string, List<string>> furnitureDict = new Dictionary<string, List<string>>();
         public static Dictionary<string, EntityParticleData> furnitureEffectDict = new Dictionary<string, EntityParticleData>();
-
-        public static Dictionary<long, List<string>> farmerDict = new Dictionary<long, List<string>>();
         public static Dictionary<long, EntityParticleData> farmerEffectDict = new Dictionary<long, EntityParticleData>();
-
-        public static Dictionary<string, List<string>> NPCDict = new Dictionary<string, List<string>>();
         public static Dictionary<string, EntityParticleData> npcEffectDict = new Dictionary<string, EntityParticleData>();
-
-        public static Dictionary<string, Dictionary<Point, List<ParticleEffectData>>> locationDict = new Dictionary<string, Dictionary<Point, List<ParticleEffectData>>>();
         public static Dictionary<string, EntityParticleData> locationEffectDict = new Dictionary<string, EntityParticleData>();
-
-        public static Dictionary<Point, List<ParticleEffectData>> screenDict = new Dictionary<Point, List<ParticleEffectData>>();
         public static EntityParticleData screenEffectDict = new EntityParticleData();
 
 
