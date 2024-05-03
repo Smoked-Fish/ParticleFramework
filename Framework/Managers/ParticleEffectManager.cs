@@ -19,7 +19,8 @@ namespace ParticleFramework.Framework.Managers
     {
         public static readonly List<string> dictPaths = new List<string>
         {
-            "Mods/Espy.ParticleFramework/dict"
+            "Mods/Espy.ParticleFramework/dict",
+            "Mods/aedenthorn.ParticleEffects/dict"
         };
 
         public static Dictionary<string, ParticleEffectData> effectDict = new Dictionary<string, ParticleEffectData>();
