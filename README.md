@@ -119,4 +119,4 @@ private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 }
 ```
 
-You can find the [Api Interface](https://github.com/Smoked-Fish/ParticleFramework/blob/main/Framework/Interfaces/IParticleFrameworkApi.cs) here
+You can find the [Api Interface](https://github.com/Smoked-Fish/ParticleFramework/blob/main/Framework/Interfaces/Internal/IParticleFrameworkApi.cs) here
