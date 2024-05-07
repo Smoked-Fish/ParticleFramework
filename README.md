@@ -2,6 +2,7 @@
 ###### **key**: The unique key for the particle effect
 ###### **type**: The type of thing to target; one of "object", "furniture", "npc", "location", "hat", "shirt", "boots", "pants", "tool", "ring"
 ###### **name**: The qualified item id or name of the target
+###### **follow**: If set to true, the particles will match the movment of the player or npc
 ###### **movementType**: How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"
 ###### **movementSpeed**: How many pixels a particle moves per tick
 ###### **acceleration**: How many pixels/tick the movement speed increases per tick
