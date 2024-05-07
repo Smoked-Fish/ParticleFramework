@@ -27,6 +27,12 @@ namespace API
         public void UnloadEffect(string key);
 
         /// <summary>
+        /// Gets all particle data for an effect. WIP
+        /// </summary>
+        /// <param name="key">The key of the particle effect to get the particle data of.</param>
+        public List<ParticleData> GetParticleData(string effectKey);
+
+        /// <summary>
         /// Gets the names of all loaded particle effects.
         /// </summary>
         /// <returns>A list of particle effect names.</returns>
@@ -44,6 +50,9 @@ namespace API
 
         /// <summary>The QualifiedItemId or Name of the target</summary>
         public string name;
+
+        /// <summary>Should the particles follow the farmer or npc when moving</summary>
+        public bool follow = false;
 
         /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
         public string movementType = "none";

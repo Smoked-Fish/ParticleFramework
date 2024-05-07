@@ -13,6 +13,7 @@ namespace ParticleFramework.Framework.Api
         public void AddCustomDictPath(string customDictPath);
         public void LoadEffect(ParticleEffectData effectData);
         public void UnloadEffect(string key);
+        public List<ParticleData> GetParticleData(string effectKey);
         public List<string> GetEffectNames();
     }
     public class ParticleFrameworkApi
@@ -54,6 +55,25 @@ namespace ParticleFramework.Framework.Api
                 ModEntry.monitor.Log($"Error unloading particle effect '{key}': {e}", LogLevel.Error);
             }
         }
+
+
+        public List<ParticleData> GetParticleData(string effectKey)
+        {
+            if (ParticleEffectManager.effectDict.TryGetValue(effectKey, out ParticleEffectData effectData))
+            {
+                // Get all particle data for this effect key
+                var allParticleData = ParticleEffectManager.GetAllParticleData(effectKey);
+                return allParticleData;
+            }
+            else
+            {
+                ModEntry.monitor.Log($"Error retrieving particle data for effect '{effectKey}': Effect key not found.", LogLevel.Warn);
+                return null;
+            }
+        }
+
+
+
         public List<string> GetEffectNames()
         {
             return ParticleEffectManager.effectDict.Keys.ToList();
