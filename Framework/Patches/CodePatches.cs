@@ -30,29 +30,29 @@ namespace ParticleFramework.Framework.Patches
                 {
                     case "hat":
                         if (__instance.hat.Value != null && __instance.hat.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                     case "shirt":
                         if (__instance.shirtItem.Value != null && __instance.shirtItem.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                     case "pants":
                         if (__instance.pantsItem.Value != null && __instance.pantsItem.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                     case "boots":
                         if (__instance.boots.Value != null && __instance.boots.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                     case "tool":
                         if (__instance.CurrentItem is Tool && __instance.CurrentItem.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                     case "ring":
                         if (__instance.leftRing.Value != null && __instance.leftRing.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         else if (__instance.rightRing.Value != null && __instance.rightRing.Value.QualifiedItemId == kvp.Value.name)
-                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                            ParticleEffectManager.ShowFarmerParticleEffect(b, __instance, kvp.Value);
                         break;
                 }
             }
@@ -66,7 +66,7 @@ namespace ParticleFramework.Framework.Patches
             {
                 if (kvp.Value.type.ToLower() == "object" && kvp.Value.name == __instance.QualifiedItemId)
                 {
-                    ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowObjectParticleEffect(spriteBatch, __instance, x, y, kvp.Value);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace ParticleFramework.Framework.Patches
             {
                 if (kvp.Value.type.ToLower() == "npc" && kvp.Value.name == __instance.Name)
                 {
-                    ParticleEffectManager.ShowNPCParticleEffect(b, __instance, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowNPCParticleEffect(b, __instance, kvp.Value);
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace ParticleFramework.Framework.Patches
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
                 {
-                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Value);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace ParticleFramework.Framework.Patches
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
                 {
-                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Value);
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace ParticleFramework.Framework.Patches
             {
                 if (kvp.Value.type.ToLower() == "furniture" && kvp.Value.name == __instance.QualifiedItemId)
                 {
-                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Key, kvp.Value);
+                    ParticleEffectManager.ShowFurnitureParticleEffect(spriteBatch, __instance, x, y, kvp.Value);
                 }
             }
 
