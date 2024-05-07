@@ -15,6 +15,9 @@ namespace ParticleFramework.Framework.Data
         public string name;
 
         /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
+        public bool follow = false;
+
+        /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
         public string movementType = "none";
 
         /// <summary>How many pixels a particle moves per tick</summary>
