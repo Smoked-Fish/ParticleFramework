@@ -19,5 +19,6 @@ namespace ParticleFramework.Framework.Data
         public float alpha;
         public int option = -1;
         public Vector2 position;
+        public Vector2 originalDirection;
     }
 }
