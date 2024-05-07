@@ -24,117 +24,75 @@ namespace ParticleFramework.Framework.Managers
         public static Dictionary<long, EntityParticleData> farmerEffectDict = [];
         public static Dictionary<string, EntityParticleData> npcEffectDict = [];
         public static Dictionary<string, EntityParticleData> locationEffectDict = [];
-        public static EntityParticleData screenEffectDict = new();
+        public static Dictionary<string, EntityParticleData> screenEffectDict = [];
 
 
-        public static void ShowFarmerParticleEffect(SpriteBatch b, Farmer instance, string key, ParticleEffectData ped)
+        public static void ShowFarmerParticleEffect(SpriteBatch spriteBatch, Farmer instance, ParticleEffectData ped)
         {
-            if (!farmerEffectDict.TryGetValue(instance.UniqueMultiplayerID, out EntityParticleData entityParticleData))
-            {
-                entityParticleData = new EntityParticleData();
-                farmerEffectDict[instance.UniqueMultiplayerID] = entityParticleData;
-            }
-            if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
-            {
-                particleList = new List<ParticleData>();
-                farmerEffectDict[instance.UniqueMultiplayerID].particleDict[key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, instance.GetBoundingBox().Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), instance.getDrawLayer());
-            farmerEffectDict[instance.UniqueMultiplayerID] = entityParticleData;
-        }
-        public static void ShowNPCParticleEffect(SpriteBatch b, NPC instance, string key, ParticleEffectData ped)
-        {
-            if (!npcEffectDict.TryGetValue(instance.Name, out EntityParticleData entityParticleData))
-            {
-                entityParticleData = new EntityParticleData();
-                npcEffectDict[instance.Name] = entityParticleData;
-            }
-            if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
-            {
-                particleList = new List<ParticleData>();
-                npcEffectDict[instance.Name].particleDict[key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, instance.GetBoundingBox().Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), 1f);
-            npcEffectDict[instance.Name] = entityParticleData;
-        }
-        public static void ShowObjectParticleEffect(SpriteBatch b, SObject instance, int x, int y, string key, ParticleEffectData ped)
-        {
-            if (!objectEffectDict.TryGetValue(instance.QualifiedItemId, out EntityParticleData entityParticleData))
-            {
-                entityParticleData = new EntityParticleData();
-                objectEffectDict[instance.QualifiedItemId] = entityParticleData;
-            }
-            if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
-            {
-                particleList = new List<ParticleData>();
-                objectEffectDict[instance.QualifiedItemId].particleDict[key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, instance.GetBoundingBoxAt(x, y).Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), Math.Max(0f, ((y + 1) * 64 - 24) / 10000f) + x * 1E-05f);
-            objectEffectDict[instance.QualifiedItemId] = entityParticleData;
+            ShowParticleEffect(spriteBatch, farmerEffectDict, instance.UniqueMultiplayerID, ped, i => instance.GetBoundingBox(), 1, false, instance);
         }
 
-        public static void ShowFurnitureParticleEffect(SpriteBatch b, Furniture instance, int x, int y, string key, ParticleEffectData ped)
+        public static void ShowNPCParticleEffect(SpriteBatch spriteBatch, NPC instance, ParticleEffectData ped)
         {
-            if (!furnitureEffectDict.TryGetValue(instance.QualifiedItemId, out EntityParticleData entityParticleData))
-            {
-                entityParticleData = new EntityParticleData();
-                furnitureEffectDict[instance.QualifiedItemId] = entityParticleData;
-            }
-            if (!entityParticleData.particleDict.TryGetValue(key, out var particleList))
-            {
-                particleList = new List<ParticleData>();
-                furnitureEffectDict[instance.QualifiedItemId].particleDict[key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, instance.boundingBox.Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY),
-                ((int)instance.furniture_type.Value == 12) ? (2E-09f + (instance.boundingBox.Y / 64) / 100000f) : ((float)(instance.boundingBox.Value.Bottom - (((int)instance.furniture_type.Value == 6 || (int)instance.furniture_type.Value == 17 || (int)instance.furniture_type.Value == 13) ? 48 : 8)) / 10000f));
-            furnitureEffectDict[instance.QualifiedItemId] = entityParticleData;
-        }
-        public static void ShowLocationParticleEffect(SpriteBatch b, GameLocation instance, ParticleEffectData ped)
-        {
-            if (!locationEffectDict.TryGetValue(instance.Name, out EntityParticleData entityParticleData))
-            {
-                entityParticleData = new EntityParticleData();
-                locationEffectDict[instance.Name] = entityParticleData;
-            }
-            List<ParticleData> particleList;
-            if (!entityParticleData.particleDict.TryGetValue(ped.key, out particleList))
-            {
-                particleList = new List<ParticleData>();
-                locationEffectDict[instance.Name].particleDict[ped.key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), 1f);
-            locationEffectDict[instance.Name] = entityParticleData;
-        }
-        public static void ShowScreenParticleEffect(SpriteBatch b, ParticleEffectData ped)
-        {
-            List<ParticleData> particleList;
-            if (!screenEffectDict.particleDict.TryGetValue(ped.key, out particleList))
-            {
-                particleList = new List<ParticleData>();
-                screenEffectDict.particleDict[ped.key] = particleList;
-            }
-            ShowParticleEffect(b, particleList, ped, new Vector2(ped.fieldOffsetX, ped.fieldOffsetY), 1f, true);
+            ShowParticleEffect(spriteBatch, npcEffectDict, instance.Name, ped, i => instance.GetBoundingBox(), 1, false, instance);
         }
 
-        public static void ShowParticleEffect(SpriteBatch spriteBatch, List<ParticleData> particles, ParticleEffectData effectData, Vector2 center, float drawDepth, bool isScreenSpace = false)
+        public static void ShowObjectParticleEffect(SpriteBatch spriteBatch, SObject instance, int x, int y, ParticleEffectData ped)
         {
-            foreach (var particle in particles.ToArray())
-            {
-                UpdateParticle(particles, particle, effectData, center);
+            ShowParticleEffect(spriteBatch, objectEffectDict, instance.QualifiedItemId, ped, i => instance.GetBoundingBoxAt(x, y), Math.Max(0f, ((y + 1) * 64 - 24) / 10000f) + x * 1E-05f);
+        }
 
-                if (IsOutOfBounds(particle, effectData, center))
+        public static void ShowFurnitureParticleEffect(SpriteBatch spriteBatch, Furniture instance, int x, int y, ParticleEffectData ped)
+        {
+            ShowParticleEffect(spriteBatch, furnitureEffectDict, instance.QualifiedItemId, ped, i => instance.GetBoundingBoxAt(x, y), ((int)instance.furniture_type.Value == 12) ? (2E-09f + (instance.boundingBox.Y / 64) / 100000f) : ((float)(instance.boundingBox.Value.Bottom - (((int)instance.furniture_type.Value == 6 || (int)instance.furniture_type.Value == 17 || (int)instance.furniture_type.Value == 13) ? 48 : 8)) / 10000f));
+        }
+
+        public static void ShowLocationParticleEffect(SpriteBatch spriteBatch, GameLocation instance, ParticleEffectData ped)
+        {
+            ShowParticleEffect(spriteBatch, locationEffectDict, instance.Name, ped, i => new Rectangle(0, 0, 0, 0));
+        }
+
+        public static void ShowScreenParticleEffect(SpriteBatch spriteBatch, ParticleEffectData ped)
+        {
+            ShowParticleEffect(spriteBatch, screenEffectDict, "screen", ped, i => new Rectangle(0, 0, 0, 0), 1f, true);
+        }
+
+
+        public static void ShowParticleEffect<T>(SpriteBatch spriteBatch, Dictionary<T, EntityParticleData> dict, T key, ParticleEffectData ped, Func<T, Rectangle> getBoundingBox, float drawDepth = 1f, bool isScreenSpace = false, object instance = null)
+        {
+            if (!dict.TryGetValue(key, out EntityParticleData entityParticleData))
+            {
+                entityParticleData = new EntityParticleData();
+                dict[key] = entityParticleData;
+            }
+
+            if (!entityParticleData.particleDict.TryGetValue(ped.key, out var particleList))
+            {
+                particleList = new List<ParticleData>();
+                entityParticleData.particleDict[ped.key] = particleList;
+            }
+
+            var center = getBoundingBox(key).Center.ToVector2() + new Vector2(ped.fieldOffsetX, ped.fieldOffsetY);
+
+            foreach (var particle in particleList.ToArray())
+            {
+                UpdateParticle(particleList, particle, ped, center, instance);
+
+                if (IsOutOfBounds(particle, ped, center))
                 {
-                    particles.Remove(particle);
+                    particleList.Remove(particle);
                     continue;
                 }
 
-                DrawParticle(spriteBatch, particle, effectData, drawDepth, isScreenSpace);
+                DrawParticle(spriteBatch, particle, ped, drawDepth, isScreenSpace);
             }
 
-            AddNewParticles(particles, effectData, center);
+            AddNewParticles(particleList, ped, center);
         }
 
-        private static void UpdateParticle(List<ParticleData> particles, ParticleData particle, ParticleEffectData effectData, Vector2 center)
+
+        // TODO: FIX FOLLOW FOR ALL MOVEMENT TYPES
+        private static void UpdateParticle(List<ParticleData> particles, ParticleData particle, ParticleEffectData effectData, Vector2 center, object instance = null)
         {
             particle.age++;
 
@@ -149,6 +107,45 @@ namespace ParticleFramework.Framework.Managers
                 SetParticleDirection(particle, effectData, center);
             }
 
+            if (particle.originalDirection == Vector2.Zero)
+            {
+                particle.originalDirection = particle.direction;
+            }
+
+            // Check if the particle should follow the player or npc
+            if (instance is Farmer farmer && effectData.follow && farmer.movedDuringLastTick())
+            {
+                Vector2 playerMovementDirection = farmer.getMostRecentMovementVector();
+                playerMovementDirection.Normalize();
+
+                Vector2 directionToCenter = center - particle.position;
+                Vector2 awayDirection = directionToCenter * new Vector2(-1, -1);
+                awayDirection.Normalize();
+
+                // Combine the away direction and the player's movement direction
+                Vector2 combinedDirection = awayDirection + playerMovementDirection * (farmer.speed + farmer.addedSpeed);
+
+                // Normalize the combined direction vector
+                combinedDirection.Normalize();
+
+                // Update the particle direction
+                particle.direction = combinedDirection;
+            }
+            else if (instance is NPC npc && effectData.follow && !npc.Position.Equals(npc.lastPosition))
+            {
+                Vector2 npcMovementDirection = new Vector2(npc.Position.X - npc.lastPosition.X, npc.Position.Y - npc.lastPosition.Y);
+                npcMovementDirection.Normalize();
+
+                particle.direction = particle.originalDirection + npcMovementDirection * (npc.speed + npc.addedSpeed);
+            }
+            else if (particle.originalDirection != Vector2.Zero)
+            {
+                // Restore the original direction if the player is not moving
+                particle.direction = particle.originalDirection;
+                particle.originalDirection = Vector2.Zero;
+            }
+
+            // Update particle position
             particle.position += particle.direction * (effectData.movementSpeed + effectData.acceleration * particle.age);
             particle.rotation += particle.rotationRate;
         }
@@ -160,25 +157,25 @@ namespace ParticleFramework.Framework.Managers
             switch (effectData.movementType)
             {
                 case "away":
-                    direction = (center - particle.position) * new Vector2(-1, -1);
+                    direction += (center - particle.position) * new Vector2(-1, -1);
                     break;
                 case "towards":
-                    direction = center - particle.position;
+                    direction += center - particle.position;
                     break;
                 case "up":
-                    direction = -Vector2.UnitY;
+                    direction += -Vector2.UnitY;
                     break;
                 case "down":
-                    direction = Vector2.UnitY;
+                    direction += Vector2.UnitY;
                     break;
                 case "left":
-                    direction = -Vector2.UnitX;
+                    direction += -Vector2.UnitX;
                     break;
                 case "right":
-                    direction = Vector2.UnitX;
+                    direction += Vector2.UnitX;
                     break;
                 case "random":
-                    direction = new Vector2((float)Game1.random.NextDouble() - 0.5f, (float)Game1.random.NextDouble() - 0.5f);
+                    direction += new Vector2((float)Game1.random.NextDouble() - 0.5f, (float)Game1.random.NextDouble() - 0.5f);
                     break;
             }
 
@@ -410,37 +407,89 @@ namespace ParticleFramework.Framework.Managers
             }
         }
 
-        public static ParticleEffectData CloneParticleEffect(string key, string type, string name, int x, int y, ParticleEffectData template)
+        public static List<ParticleData> GetAllParticleData(object effectKey)
         {
-            return new ParticleEffectData()
+            var allParticleData = new List<ParticleData>();
+
+            // Dictionaries with string keys
+            Dictionary<string, EntityParticleData>[] stringDicts = { npcEffectDict, objectEffectDict, furnitureEffectDict, locationEffectDict, screenEffectDict };
+
+            // Dictionary with long keys
+            Dictionary<long, EntityParticleData>[] longDicts = { farmerEffectDict };
+
+            // Check if the effectKey is a string or a long
+            if (effectKey is string)
             {
-                key = key,
-                type = type,
-                name = name,
-                movementType = template.movementType,
-                movementSpeed = template.movementSpeed,
-                frameSpeed = template.frameSpeed,
-                acceleration = template.acceleration,
-                restrictOuter = template.restrictOuter,
-                restrictInner = template.restrictInner,
-                minRotationRate = template.minRotationRate,
-                maxRotationRate = template.maxRotationRate,
-                particleWidth = template.particleWidth,
-                particleHeight = template.particleHeight,
-                fieldInnerWidth = template.fieldInnerWidth,
-                fieldInnerHeight = template.fieldInnerHeight,
-                fieldOuterWidth = template.fieldOuterWidth,
-                fieldOuterHeight = template.fieldOuterHeight,
-                minParticleScale = template.minParticleScale,
-                maxParticleScale = template.maxParticleScale,
-                maxParticles = template.maxParticles,
-                minLifespan = template.minLifespan,
-                maxLifespan = template.maxLifespan,
-                spriteSheetPath = template.spriteSheetPath,
-                spriteSheet = template.spriteSheet,
-                fieldOffsetX = x,
-                fieldOffsetY = y
-            };
+                string keyString = (string)effectKey;
+                // Iterate through dictionaries with string keys
+                foreach (var dict in stringDicts)
+                {
+                    if (dict.TryGetValue(keyString, out EntityParticleData entityParticleData))
+                    {
+                        if (entityParticleData.particleDict.TryGetValue(keyString, out List<ParticleData> particleList))
+                        {
+                            allParticleData.AddRange(particleList);
+                        }
+                    }
+                }
+            }
+            else if (effectKey is long)
+            {
+                long keyLong = (long)effectKey;
+                // Iterate through dictionary with long keys
+                foreach (var dict in longDicts)
+                {
+                    if (dict.TryGetValue(keyLong, out EntityParticleData entityParticleData))
+                    {
+                        if (entityParticleData.particleDict.TryGetValue(keyLong.ToString(), out List<ParticleData> particleList))
+                        {
+                            allParticleData.AddRange(particleList);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Invalid type for effectKey
+                ModEntry.monitor.Log($"Error: Invalid type for effect key '{effectKey}'. Expected string or long.", LogLevel.Error);
+            }
+
+            return allParticleData;
         }
+
     }
 }
+
+
+/*public static ParticleEffectData CloneParticleEffect(string key, string type, string name, int x, int y, ParticleEffectData template)
+{
+    return new ParticleEffectData()
+    {
+        key = key,
+        type = type,
+        name = name,
+        movementType = template.movementType,
+        movementSpeed = template.movementSpeed,
+        frameSpeed = template.frameSpeed,
+        acceleration = template.acceleration,
+        restrictOuter = template.restrictOuter,
+        restrictInner = template.restrictInner,
+        minRotationRate = template.minRotationRate,
+        maxRotationRate = template.maxRotationRate,
+        particleWidth = template.particleWidth,
+        particleHeight = template.particleHeight,
+        fieldInnerWidth = template.fieldInnerWidth,
+        fieldInnerHeight = template.fieldInnerHeight,
+        fieldOuterWidth = template.fieldOuterWidth,
+        fieldOuterHeight = template.fieldOuterHeight,
+        minParticleScale = template.minParticleScale,
+        maxParticleScale = template.maxParticleScale,
+        maxParticles = template.maxParticles,
+        minLifespan = template.minLifespan,
+        maxLifespan = template.maxLifespan,
+        spriteSheetPath = template.spriteSheetPath,
+        spriteSheet = template.spriteSheet,
+        fieldOffsetX = x,
+        fieldOffsetY = y
+    };
+}*/
