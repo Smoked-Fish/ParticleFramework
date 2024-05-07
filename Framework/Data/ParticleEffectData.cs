@@ -14,7 +14,7 @@ namespace ParticleFramework.Framework.Data
         /// <summary>The QualifiedItemId or Name of the target</summary>
         public string name;
 
-        /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
+        /// <summary>Should the particles follow the farmer or npc when moving</summary>
         public bool follow = false;
 
         /// <summary>How particles move; one of "none", "away", "towards", "up", "down", "left", "right", "random"</summary>
