@@ -96,7 +96,6 @@ namespace ParticleFramework
                 }
             }
         }
-
         private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
         {
             if (!modConfig.EnableMod)
