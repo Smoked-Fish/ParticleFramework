@@ -28,7 +28,7 @@ namespace ParticleFramework.Framework.Patches
             }
             catch (Exception e)
             {
-                ModEntry.monitor.Log($"Issue with Harmony patching for method {originalMethod} with {newMethod}: {e}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Issue with Harmony patching for method {originalMethod} with {newMethod}: {e}", LogLevel.Error);
                 return;
             }
         }
